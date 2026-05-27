@@ -17,6 +17,15 @@
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit"
   },
+  "homepage": "https://www.npmjs.com/package/claude-code-alert",
+  "keywords": [
+    "claude",
+    "claude-code",
+    "notification",
+    "toast",
+    "hook",
+    "cli"
+  ],
   "engines": {
     "node": ">=18"
   },

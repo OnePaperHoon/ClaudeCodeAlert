@@ -1,8 +1,13 @@
 # claude-code-alert (`cca`)
 
+[![npm version](https://img.shields.io/npm/v/claude-code-alert.svg)](https://www.npmjs.com/package/claude-code-alert)
+[![npm downloads](https://img.shields.io/npm/dm/claude-code-alert.svg)](https://www.npmjs.com/package/claude-code-alert)
+
 [Claude Code](https://claude.com/claude-code) hook 이벤트에 사운드 + 토스트 알림을 띄워주는 크로스플랫폼 라이브러리. Windows / macOS 지원.
 
 설치하면 `cca` 명령으로 사용합니다.
+
+> npm: <https://www.npmjs.com/package/claude-code-alert>
 
 ## 설치
 
