@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import * as p from '@clack/prompts';
+import pc from 'picocolors';
 import { paths } from '../platform/paths.js';
 import { readSettings, readCcaConfig } from '../settings/reader.js';
 import {
@@ -45,6 +46,7 @@ export async function runInit(): Promise<void> {
   // 3) merge plan 미리 산출 → diff
   const { next, plan } = mergeHooks(settings, enabled, decision);
   p.log.message(renderMergeDiff(plan));
+  p.log.message(pc.green('  + ~/.claude/commands/cca-off.md, cca-on.md  (/cca-off, /cca-on)'));
 
   // 'skip' 으로 결정된 이벤트는 settings.json 에 우리 hook 이 안 들어가므로
   // cca-config 에서도 비활성 처리 + advanced prompt 에서 제외
@@ -75,6 +77,11 @@ export async function runInit(): Promise<void> {
   const pkgScriptsDir = locatePackageScripts();
   await copyFile(join(pkgScriptsDir, 'cca.ps1'), paths.scriptPs1);
   await copyFile(join(pkgScriptsDir, 'cca.sh'), paths.scriptSh);
+
+  // 7.5) 토글 슬래시 커맨드 설치
+  await mkdir(paths.commandsDir, { recursive: true });
+  await copyFile(join(pkgScriptsDir, 'commands', 'cca-off.md'), paths.cmdOff);
+  await copyFile(join(pkgScriptsDir, 'commands', 'cca-on.md'), paths.cmdOn);
 
   // 8) cca-config.json 쓰기
   await writeCcaConfig(cfg);

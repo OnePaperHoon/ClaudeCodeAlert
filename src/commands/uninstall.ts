@@ -20,11 +20,12 @@ export async function runUninstall(): Promise<void> {
   const alsoDelete = await p.multiselect({
     message: 'Also delete?',
     options: [
-      { value: 'scripts', label: '~/.claude/scripts/cca.{ps1,sh}', hint: 'recommended' },
-      { value: 'config',  label: '~/.claude/cca-config.json',     hint: 'recommended' },
-      { value: 'sounds',  label: '~/.claude/sounds/  (custom sounds)' },
+      { value: 'scripts',  label: '~/.claude/scripts/cca.{ps1,sh}', hint: 'recommended' },
+      { value: 'config',   label: '~/.claude/cca-config.json',     hint: 'recommended' },
+      { value: 'commands', label: '~/.claude/commands/cca-off.md, cca-on.md', hint: 'recommended' },
+      { value: 'sounds',   label: '~/.claude/sounds/  (custom sounds)' },
     ],
-    initialValues: ['scripts', 'config'],
+    initialValues: ['scripts', 'config', 'commands'],
     required: false,
   });
   if (p.isCancel(alsoDelete)) {
@@ -51,6 +52,11 @@ export async function runUninstall(): Promise<void> {
   }
   if (targets.includes('config') && existsSync(paths.ccaConfig)) {
     await unlink(paths.ccaConfig);
+  }
+  if (targets.includes('commands')) {
+    for (const f of [paths.cmdOff, paths.cmdOn]) {
+      if (existsSync(f)) await unlink(f);
+    }
   }
   if (targets.includes('sounds') && existsSync(paths.soundsDir)) {
     await rm(paths.soundsDir, { recursive: true, force: true });

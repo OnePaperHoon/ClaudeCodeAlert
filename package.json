@@ -1,6 +1,6 @@
 {
   "name": "claude-code-alert",
-  "version": "0.1.5",
+  "version": "1.0.0",
   "description": "Cross-platform sound + toast notifications for Claude Code hooks",
   "type": "module",
   "bin": {

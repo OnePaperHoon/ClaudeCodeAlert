@@ -37,7 +37,7 @@ export function isOurHookNode(node: HookMatcherNode): boolean {
 export type ConflictDecision = 'append' | 'skip' | 'abort';
 
 export interface MergePlan {
-  byEvent: Record<string, 'append' | 'replace' | 'skip' | 'noop'>;
+  byEvent: Record<string, 'append' | 'replace' | 'skip' | 'remove' | 'noop'>;
 }
 
 export function mergeHooks(
@@ -53,7 +53,9 @@ export function mergeHooks(
   const next: ClaudeSettings = { ...settings, hooks: nextHooks };
   const plan: MergePlan = { byEvent: {} };
   const ourNode = buildOurHookNode();
+  const enabledSet = new Set<EventName>(enabledEvents);
 
+  // 1) enabled 이벤트: 머지 (append / replace / skip)
   for (const event of enabledEvents) {
     const arr = [...(nextHooks[event] ?? [])];
     const ourIdx = arr.findIndex(isOurHookNode);
@@ -74,6 +76,18 @@ export function mergeHooks(
     }
     nextHooks[event] = arr;
   }
+
+  // 2) 비활성 이벤트에 우리 hook 이 남아 있으면 제거 (정합성 정리)
+  for (const event of Object.keys(nextHooks) as EventName[]) {
+    if (enabledSet.has(event)) continue;
+    const arr = nextHooks[event] ?? [];
+    if (!arr.some(isOurHookNode)) continue;
+    const filtered = arr.filter((n) => !isOurHookNode(n));
+    if (filtered.length === 0) delete nextHooks[event];
+    else nextHooks[event] = filtered;
+    plan.byEvent[event] = 'remove';
+  }
+
   return { next, plan };
 }
 

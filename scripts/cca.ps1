@@ -18,7 +18,7 @@ try {
 
     $configFile = Join-Path $claudeDir 'cca-config.json'
     if (-not (Test-Path $configFile)) { exit 0 }
-    $cfg = Get-Content -Raw $configFile | ConvertFrom-Json -ErrorAction Stop
+    $cfg = Get-Content -Raw -Encoding UTF8 $configFile | ConvertFrom-Json -ErrorAction Stop
 
     $eventCfg = $cfg.events.$event
     if ($null -eq $eventCfg -or -not $eventCfg.enabled) { exit 0 }
@@ -49,6 +49,7 @@ try {
       <text>$xmlMessage</text>
     </binding>
   </visual>
+  <audio silent="true"/>
   <actions>
     <action activationType="system" arguments="dismiss" content="OK"/>
   </actions>

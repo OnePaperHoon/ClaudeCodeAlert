@@ -3,9 +3,11 @@ import { runInit } from './commands/init.js';
 import { runDisable } from './commands/disable.js';
 import { runEnable } from './commands/enable.js';
 import { runUninstall } from './commands/uninstall.js';
+import { runStatus } from './commands/status.js';
 
 const HELP = `cca (claude-code-alert)
   cca init       Install hooks (interactive)
+  cca status     Show current installation state
   cca disable    Mute notifications
   cca enable     Unmute notifications
   cca uninstall  Remove our hooks
@@ -17,6 +19,9 @@ try {
   switch (cmd) {
     case 'init':
       await runInit();
+      break;
+    case 'status':
+      await runStatus();
       break;
     case 'disable':
       await runDisable();

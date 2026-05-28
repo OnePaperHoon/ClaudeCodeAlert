@@ -35,7 +35,7 @@ RESULT=$(python3 - "$CONFIG" "$EVENT" "$STDIN_MSG" <<'PY' 2>/dev/null
 import sys, json, os
 cfg_path, event, stdin_msg = sys.argv[1], sys.argv[2], sys.argv[3]
 try:
-    with open(cfg_path) as f:
+    with open(cfg_path, encoding='utf-8') as f:
         cfg = json.load(f)
     ev = cfg.get("events", {}).get(event)
     if not ev or not ev.get("enabled"):
